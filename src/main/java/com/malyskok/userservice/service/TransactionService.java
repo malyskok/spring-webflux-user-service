@@ -10,11 +10,13 @@ package com.malyskok.userservice.service;
 import com.malyskok.userservice.dto.TransactionRequestDto;
 import com.malyskok.userservice.dto.TransactionResponseDto;
 import com.malyskok.userservice.dto.TransactionStatus;
+import com.malyskok.userservice.entity.UserTransaction;
 import com.malyskok.userservice.repository.UserRepository;
 import com.malyskok.userservice.repository.UserTransactionRepository;
 import com.malyskok.userservice.util.EntityDtoUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Service
@@ -39,5 +41,9 @@ public class TransactionService {
                 .flatMap(userTransaction -> transactionRepository.save(userTransaction))
                 .map(userTransactionMono -> EntityDtoUtil.toDto(requestDto, TransactionStatus.APPROVED))
                 .defaultIfEmpty(EntityDtoUtil.toDto(requestDto, TransactionStatus.DECLINED));
+    }
+
+    public Flux<UserTransaction> getUserTransactions(Integer userId){
+        return transactionRepository.findByUserId(userId);
     }
 }

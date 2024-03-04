@@ -9,16 +9,15 @@ package com.malyskok.userservice.controller;
 
 import com.malyskok.userservice.dto.TransactionRequestDto;
 import com.malyskok.userservice.dto.TransactionResponseDto;
+import com.malyskok.userservice.entity.UserTransaction;
 import com.malyskok.userservice.service.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @RestController
-@RequestMapping("user-transaction")
+@RequestMapping("user/transaction")
 public class UserTransactionController {
 
     @Autowired
@@ -30,5 +29,10 @@ public class UserTransactionController {
 
         return requestDtoMono.flatMap(requestDto ->
                 transactionService.createTransaction(requestDto));
+    }
+
+    @GetMapping("user/{user-id}")
+    public Flux<UserTransaction> getUserTransactions(@PathVariable("user-id") Integer userId){
+        return transactionService.getUserTransactions(userId);
     }
 }

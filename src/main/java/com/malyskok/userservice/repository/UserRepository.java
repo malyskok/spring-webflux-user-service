@@ -8,6 +8,7 @@
 package com.malyskok.userservice.repository;
 
 import com.malyskok.userservice.entity.User;
+import org.springframework.data.r2dbc.repository.Modifying;
 import org.springframework.data.r2dbc.repository.Query;
 import org.springframework.data.repository.reactive.ReactiveCrudRepository;
 import org.springframework.stereotype.Repository;
@@ -16,6 +17,7 @@ import reactor.core.publisher.Mono;
 @Repository
 public interface UserRepository extends ReactiveCrudRepository<User, Integer> {
 
+    @Modifying
     @Query("update users " +
             "set balance = balance - :amount " +
             "where id = :userId " +
